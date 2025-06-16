@@ -63,7 +63,7 @@ const Navigation: React.FC = () => {
 
             
             {/* Bottom Navigation */}
-            <div className="absolute bottom-0 w-full z-30 print:hidden min-h-12">
+            <div className="fixed px-6 bottom-0 w-full z-30 print:hidden min-h-12">
                 <div
                     className={`
                     bg-primary-dark
@@ -140,24 +140,24 @@ const Navigation: React.FC = () => {
                     </div>
                 </div>
             </div>
-            {/* Dual rotated footer items, fixed vertical center, left/right */}
-            <footer className="relative overflow-hidden h-screen  z-10   w-screen">
+            {/* Dual rotated footer items, fixed vertical center, left/right (improved for consistent layout) */}
+            <footer className="fixed hidden md:block z-10 w-screen top-1/2 left-0 -translate-y-1/2 pointer-events-none px-20">
+              <div className="relative w-full h-40">
                 {/* Left item */}
                 <div
-                    className="hidden md:block absolute -left-4  top-1/2 -translate-y-1/2  translate-x-1/2 rotate-[-90deg] text-white text-xs font-primary tracking-wider pt-20"
-                    style={{ transformOrigin: 'left' }}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 origin-left -rotate-90 text-white text-xs font-primary tracking-wider pointer-events-auto"
+                  style={{ transformOrigin: 'left center' }}
                 >
-                    Ramón Morcillo - {new Date().getFullYear()}
+                  Ramón Morcillo - {new Date().getFullYear()}
                 </div>
                 {/* Right item */}
                 <div
-                    className="hidden md:block absolute top-1/2 -right-4 -translate-x-1/2 -translate-y-1/2 rotate-90 text-white text-xs font-primary tracking-wider pr-8 pt-12"
-                    style={{ transformOrigin: 'right' }}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 origin-right rotate-90 text-white text-xs font-primary tracking-wider pointer-events-auto pt-4"
+                  style={{ transformOrigin: 'right center' }}
                 >
-                    Made with 💚 & ⏳
+                  Made with 💚 & ⏳
                 </div>
-                {/* Mobile: horizontal, not rotated, hidden when menu is open */}
-
+              </div>
             </footer>
         </>
     )
