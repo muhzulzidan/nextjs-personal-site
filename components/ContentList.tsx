@@ -1,9 +1,57 @@
 "use client"
 
 import Link from 'next/link';
+import slugify from 'slugify';
 import Image from 'next/image';
+import React, { useState } from 'react';
 import * as Tooltip from '@radix-ui/react-tooltip';
+// Custom tooltip that follows the cursor for image preview
+function CursorTooltip({ image, alt, children }: { image: string, alt: string, children: React.ReactNode }) {
+  const [show, setShow] = useState(false);
+  const [coords, setCoords] = useState({ x: 0, y: 0 });
 
+  const handleMouseMove = (e: React.MouseEvent) => {
+    setCoords({ x: e.clientX, y: e.clientY });
+  };
+
+  return (
+    <span
+      onMouseEnter={() => setShow(true)}
+      onMouseLeave={() => setShow(false)}
+      onMouseMove={handleMouseMove}
+      style={{ position: 'relative' }}
+    >
+      {children}
+      {show && image && (
+        <div
+          style={{
+            position: 'fixed',
+            top: coords.y + 20,
+            left: coords.x + 20,
+            zIndex: 1000,
+            pointerEvents: 'none',
+            background: 'rgba(255,255,255,0.95)',
+            borderRadius: 8,
+            boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+            padding: 8,
+            width: 220,
+            maxWidth: '90vw',
+          }}
+        >
+          <Image
+            src={image}
+            alt={alt}
+            width={200}
+            height={120}
+            style={{ borderRadius: 6, width: '100%', height: 'auto' }}
+            placeholder="blur"
+            blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDIwMCAxMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIxMjAiIGZpbGw9IiNlZWUiLz48L3N2Zz4="
+          />
+        </div>
+      )}
+    </span>
+  );
+}
 export interface ContentListItem {
   title: string;
   slug: string;
@@ -22,14 +70,14 @@ interface ContentListProps {
 
 export function ContentList({ content, type = false }: ContentListProps) {
   return (
-    <Tooltip.Provider>
-      <div className="space-y-6">
+    <Tooltip.Provider delayDuration={0}>
+      <div className="space-y-6 ">
         {content.map((item) => {
           const workType = item.type;
           const workLink = workType === 'project' && item.url ? item.url : `/blog/${item.slug}`;
           return (
-            <Tooltip.Root key={item.slug}>
-              <Tooltip.Trigger asChild>
+            item.image ? (
+              <CursorTooltip image={item.image ?? ''} alt={item.title} key={item.slug}>
                 <div
                   className="transition duration-200 ease-in-out p-4 rounded-[5px] flex flex-wrap justify-between relative hover:bg-white/10 cursor-pointer"
                   tabIndex={0}
@@ -52,16 +100,16 @@ export function ContentList({ content, type = false }: ContentListProps) {
                     <div className="flex flex-wrap gap-2 mt-2 items-center">
                       {type && workType && (
                         <span
-                          className="capitalize px-2 py-1 rounded text-xs font-semibold bg-white/80 text-black"
+                          className="capitalize px-2 py-1 rounded-full text-xs font-semibold bg-white/80 text-black"
                         >
                           {workType}
                         </span>
                       )}
                       {item.tags?.sort().map((tag) => (
                         <Link
-                          href={`/tags/${tag}`}
+                          href={`/tags/${slugify(tag, { lower: true, strict: true })}`}
                           key={tag}
-                          className="px-2 py-1 rounded text-xs bg-white/20 text-white hover:bg-white/40 transition-colors"
+                          className="px-2 py-1 rounded-full text-xs bg-white/20 text-white hover:bg-white hover:text-black transition-colors font-semibold"
                         >
                           {tag}
                         </Link>
@@ -72,23 +120,52 @@ export function ContentList({ content, type = false }: ContentListProps) {
                     {item.date}
                   </div>
                 </div>
-              </Tooltip.Trigger>
-              {item.image && (
-                <Tooltip.Portal>
-                  <Tooltip.Content className="z-50 rounded-lg bg-white/90 p-2 shadow-lg border border-gray-200" sideOffset={5} side="top" align="center" style={{ width: 320, maxWidth: '90vw' }}>
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      className="rounded-lg w-full h-auto object-cover"
-                      width={320}
-                      height={180}
-                      style={{ maxWidth: '100%', height: 'auto' }}
-                    />
-                    <Tooltip.Arrow className="fill-white" />
-                  </Tooltip.Content>
-                </Tooltip.Portal>
-              )}
-            </Tooltip.Root>
+              </CursorTooltip>
+            ) : (
+              <div
+                className="transition duration-200 ease-in-out p-4 rounded-[5px] flex flex-wrap justify-between relative hover:bg-white/10 cursor-pointer"
+                tabIndex={0}
+                role="button"
+                aria-label={item.title}
+                key={item.slug}
+              >
+                <div className="max-w-[70%] flex-1 md:max-w-full flex flex-col">
+                  <Link
+                    href={workLink}
+                    target="_blank"
+                    className="text-[1.15rem] font-medium text-white border-b-0 hover:underline "
+                  >
+                    {item.title}
+                  </Link>
+                  {item.description && (
+                    <div className="text-gray-400 text-base font-normal border-b-0 block py-2">
+                      {item.description}
+                    </div>
+                  )}
+                  <div className="flex flex-wrap gap-2 mt-2 items-center">
+                    {type && workType && (
+                      <span
+                        className="capitalize px-2 py-1 rounded-full text-xs font-semibold bg-white/80 text-black"
+                      >
+                        {workType}
+                      </span>
+                    )}
+                    {item.tags?.sort().map((tag) => (
+                      <Link
+                        href={`/tags/${slugify(tag, { lower: true, strict: true })}`}
+                        key={tag}
+                        className="px-2 py-1 rounded-full text-xs bg-white/20 text-white hover:bg-white hover:text-black transition-colors font-semibold"
+                      >
+                        {tag}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+                <div className="md:text-right mt-2 md:mt-0 md:w-40 text-gray-500 text-sm max-w-[30%] md:max-w-full pt-4 pb-2">
+                  {item.date}
+                </div>
+              </div>
+            )
           );
         })}
       </div>

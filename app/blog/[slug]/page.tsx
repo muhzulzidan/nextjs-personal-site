@@ -16,7 +16,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   if (!post) return notFound();
 
   return (
-    <div className="max-w-4xl w-full mx-auto mt-24 mb-20 px-4 relative">
+    <div className="max-w-4xl w-full mx-auto mt-24 mb-20 px-4 relative z-50">
       <article>
         <header>
           <h1 className="text-2xl font-medium mb-2">{post.meta.title}</h1>
@@ -26,7 +26,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               <Link
                 key={tag}
                 href={`/tags/${slugify(tag, { lower: true, strict: true })}`}
-                className="inline-block px-3 py-1 rounded-md bg-white/20 text-white/90  font-medium text-xs hover:bg-white/30 transition-colors"
+                className="inline-block px-3 py-1 rounded-full bg-white/20 text-white/90  font-semibold text-xs hover:bg-white hover:text-black transition-colors "
               >
                 {tag}
               </Link>

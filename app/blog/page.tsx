@@ -4,7 +4,7 @@ import { getAllPosts } from '@/lib/md';
 export default function BlogPage() {
   const posts = getAllPosts();
   return (
-    <main className="max-w-2xl mx-auto py-10 px-4">
+    <main className="max-w-2xl mx-auto py-10 px-4 relative z-50">
       <h1 className="text-3xl font-bold mb-8">Blog</h1>
       <ul className="space-y-6">
         {posts.map((post) => (

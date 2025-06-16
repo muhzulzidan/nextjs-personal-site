@@ -33,7 +33,7 @@ export default function WorksPage() {
     .slice(0, 3);
 
   return (
-    <main className="max-w-4xl mx-auto py-10 px-4 my-24 mb-40">
+    <main className="max-w-4xl mx-auto py-10 px-4 my-24 mb-40 relative z-50">
       <header className="mb-12 px-4 flex flex-col gap-2">
         <h1 className="text-3xl">Works</h1>
         <p className="text-gray-400 font-light text-lg">What I do and write about</p>
