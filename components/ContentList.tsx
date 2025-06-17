@@ -52,6 +52,7 @@ function CursorTooltip({ image, alt, children }: { image: string, alt: string, c
     </span>
   );
 }
+
 export interface ContentListItem {
   title: string;
   slug: string;
@@ -78,7 +79,9 @@ export function ContentList({ content, type = false }: ContentListProps) {
           return (
             item.image ? (
               <CursorTooltip image={item.image ?? ''} alt={item.title} key={item.slug}>
-                <div
+                <Link
+                  href={workLink}
+                  target="_blank"
                   className="transition duration-200 ease-in-out p-4 rounded-[5px] flex flex-wrap justify-between relative hover:bg-white/10 cursor-pointer"
                   tabIndex={0}
                   role="button"
@@ -119,7 +122,7 @@ export function ContentList({ content, type = false }: ContentListProps) {
                   <div className="md:text-right mt-2 md:mt-0 md:w-40 text-gray-500 text-sm max-w-[30%] md:max-w-full pt-4 pb-2">
                     {item.date}
                   </div>
-                </div>
+                </Link>
               </CursorTooltip>
             ) : (
               <div

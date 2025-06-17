@@ -1,9 +1,36 @@
+
 import { getPostBySlug, getPostSlugs } from '@/lib/md';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import slugify from 'slugify';
 import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
+
+
+
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://golden-panda-1e2e39.netlify.app';
+  const imageUrl = `${siteUrl}${post?.image}`;
+  return {
+    title: post?.meta.title,
+    description: post?.meta.description,
+    openGraph: {
+      URL, // og:url
+      type: 'article', // og:type
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: post?.meta.title || 'Blog post image',
+        },
+      ],
+    },
+  };
+}
 
 export async function generateStaticParams() {
   const slugs = await getPostSlugs();
