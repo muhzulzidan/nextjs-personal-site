@@ -8,7 +8,7 @@ export default function StarRoot() {
     const pathname = usePathname();
 
     return (
-    <>
+        <>
             {pathname !== '/' && (
                 <Stars
                     normalVelocity={0.0001}
@@ -16,7 +16,6 @@ export default function StarRoot() {
                     addEventListeners={false}
                 />
             )}
-
-    </>
+        </>
     )
 }

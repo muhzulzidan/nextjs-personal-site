@@ -54,7 +54,7 @@ export default async function TagPage({ params }: { params: Promise<{ tag: strin
   const displayTag = allTags.find(t => slugify(t, { lower: true, strict: true }) === tag) || tag;
 
   return (
-    <main className="max-w-4xl mx-auto py-10 px-4 mt-24 relative z-50">
+    <main className="max-w-4xl mx-auto py-10 px-4 mt-24 relative z-30">
       <header className="mb-12 px-4 flex flex-col gap-2">
         <h1 className="text-3xl">Works tagged &quot;{displayTag}&quot;</h1>
         <p className="text-gray-400 font-light text-lg">All posts and projects with this tag</p>

@@ -3,6 +3,7 @@ import React from "react"
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import HelpMessageContainer from './HelpMessageContainer';
 
 
 interface MenuLinkProps {
@@ -41,8 +42,21 @@ function MenuLink({ href, children }: MenuLinkProps) {
 }
 
 
+// // Device detection hook
+// function useIsMobile() {
+//     const [isMobile, setIsMobile] = React.useState(false);
+//     React.useEffect(() => {
+//         const check = () => setIsMobile(window.innerWidth < 768);
+//         check();
+//         window.addEventListener('resize', check);
+//         return () => window.removeEventListener('resize', check);
+//     }, []);
+//     return isMobile;
+// }
+
 const Navigation: React.FC = () => {
     const [open, setOpen] = useState(false)
+    const pathname = usePathname();
     return (
         <>
             {/* Logo: fixed top left on desktop, bottom in nav on mobile */}
@@ -61,23 +75,25 @@ const Navigation: React.FC = () => {
                 </Link>
             </div>
 
-            
             {/* Bottom Navigation */}
-            <div className="fixed px-6 bottom-0 w-full z-30 print:hidden min-h-12">
+            <div className="fixed bottom-0 w-full z-50 print:hidden min-h-12">
                 <div
                     className={`
-                    bg-primary-dark
                     overflow-hidden
                     transition-all duration-500 ease-[cubic-bezier(0.45,0,0.1,1)]
                     flex flex-col
-                   
-                    ${open ? 'max-h-[800px]  px-6 py-6' : 'max-h-[48px]  px-6 py-0'}
-                    md:max-h-none md:overflow-visible md:transition-none md:px-12 md:py-12 md:block
+                    relative
+                    ${open ? 'max-h-[800px] pt-24 px-6 md:px-12 py-6' : 'max-h-[56px] px-6  md:px-12 py-0 pt-0'}
+                    md:max-h-none md:overflow-visible md:transition-none md:px-12  md:py-12 md:block
                     `}
                     style={{ maxHeight: undefined }}
                 >
+                    {/* Mobile gradient overlay: dark BG + fade, only on mobile and not on home */}
+                    {pathname !== '/' && (
+                        <div className="absolute inset-0 md:hidden pointer-events-none z-0 bg-gradient-to-b from-transparent via-30% via-stone-950 to-stone-950/90" aria-hidden="true" />
+                    )}
                     {/* Logo/toggle bar always at top of nav */}
-                    <div className="md:hidden flex items-center justify-between w-full mb-2">
+                    <div className="md:hidden flex items-center justify-between w-full mb-2  relative z-10">
                         <Link href="/" className="block w-10 hover:scale-110 transition">
                             <svg
                                 width="32"
@@ -98,8 +114,17 @@ const Navigation: React.FC = () => {
                             <span className={`h-[1px] bg-white transition-all ${open ? "w-[60%]" : "w-full"}`} />
                         </div>
                     </div>
+                    {/* HelpMessageContainer: show when menu is closed on mobile, always on desktop */}
+                    {/* <div className="w-full flex justify-center items-center mb-2 absolute right-1/2 translate-x-1/2 bottom-10 z-10">
+                        <HelpMessageContainer show={!open ? false : true} />
+                    </div> */}
+                    {pathname === '/' && (
+                        <div className=" flex justify-center items-center mb-2 fixed w-8/12 right-1/2 translate-x-1/2 bottom-4 z-10">
+                            <HelpMessageContainer show={open ? false : true} />
+                        </div>
+                    )}
                     {/* Menu content, only visible when open or on desktop */}
-                    <div className={`gap-4 justify-center flex flex-col transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'} md:opacity-100 md:pointer-events-auto`}>
+                    <div className={`gap-4 justify-center flex flex-col transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'} md:opacity-100 md:pointer-events-auto relative z-10`}>
                         {/* Two-column Menu: Social links and Navigation links */}
                         <nav className="flex justify-between pt-6">
                             {/* Social Links (left on desktop) */}

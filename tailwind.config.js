@@ -18,7 +18,7 @@ module.exports = {
         xxxLarge: '3rem',   // 48px
         xxxxLarge: '4.5rem' // 72px
       },
-    },
+    }
   },
   plugins: [],
 }

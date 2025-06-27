@@ -43,7 +43,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   if (!post) return notFound();
 
   return (
-    <div className="max-w-4xl w-full mx-auto mt-24 mb-20 px-4 relative z-50">
+    <div className="max-w-4xl w-full mx-auto mt-24 mb-20 px-4 relative z-30">
       <article>
         <header>
           <h1 className="text-2xl font-medium mb-2">{post.meta.title}</h1>
