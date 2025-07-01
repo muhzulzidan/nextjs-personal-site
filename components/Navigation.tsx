@@ -61,7 +61,7 @@ const Navigation: React.FC = () => {
         <>
             {/* Logo: fixed top left on desktop, bottom in nav on mobile */}
             {/* Desktop logo */}
-            <div className="hidden md:block fixed top-0 left-0 z-20 px-20 py-16">
+            <div className="hidden xl:block fixed top-0 left-0 z-20 px-20 py-16">
                 <Link href="/" className="block w-10 hover:scale-110 transition">
                     <svg
                         width="32"
@@ -83,17 +83,17 @@ const Navigation: React.FC = () => {
                     transition-all duration-500 ease-[cubic-bezier(0.45,0,0.1,1)]
                     flex flex-col
                     relative
-                    ${open ? 'max-h-[800px] pt-24 px-6 md:px-12 py-6' : 'max-h-[56px] px-6  md:px-12 py-0 pt-0'}
-                    md:max-h-none md:overflow-visible md:transition-none md:px-12  md:py-12 md:block
+                    ${open ? 'max-h-[800px] pt-24 px-6 xl:px-12 py-6' : 'max-h-[56px] px-6  xl:px-12 py-0 pt-0'}
+                    xl:max-h-none xl:overflow-visible xl:transition-none xl:px-12  xl:py-12 xl:block
                     `}
                     style={{ maxHeight: undefined }}
                 >
                     {/* Mobile gradient overlay: dark BG + fade, only on mobile and not on home */}
                     {pathname !== '/' && (
-                        <div className="absolute inset-0 md:hidden pointer-events-none z-0 bg-gradient-to-b from-transparent via-30% via-stone-950 to-stone-950/90" aria-hidden="true" />
+                        <div className="absolute inset-0 xl:hidden pointer-events-none z-0 bg-gradient-to-b from-transparent via-30% via-stone-950 to-stone-950/90" aria-hidden="true" />
                     )}
                     {/* Logo/toggle bar always at top of nav */}
-                    <div className="md:hidden flex items-center justify-between w-full mb-2  relative z-10">
+                    <div className="xl:hidden flex items-center justify-between w-full mb-2  relative z-10">
                         <Link href="/" className="block w-10 hover:scale-110 transition">
                             <svg
                                 width="32"
@@ -124,11 +124,11 @@ const Navigation: React.FC = () => {
                         </div>
                     )}
                     {/* Menu content, only visible when open or on desktop */}
-                    <div className={`gap-4 justify-center flex flex-col transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'} md:opacity-100 md:pointer-events-auto relative z-10`}>
+                    <div className={`gap-4 justify-center flex flex-col transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'} xl:opacity-100 xl:pointer-events-auto relative z-10`}>
                         {/* Two-column Menu: Social links and Navigation links */}
                         <nav className="flex justify-between pt-6">
                             {/* Social Links (left on desktop) */}
-                            <ul className="flex flex-col gap-2 md:mb-0 md:w-1/2 md:items-start">
+                            <ul className="flex flex-col gap-2 xl:mb-0 xl:w-1/2 xl:items-start">
                                 {socialLinks.map((social) => (
                                     <li key={social.name}>
                                         <a href={social.socialUrl} target="_blank" rel="noopener noreferrer"
@@ -139,7 +139,7 @@ const Navigation: React.FC = () => {
                                 ))}
                             </ul>
                             {/* Navigation Links (right on desktop) */}
-                            <ul className="flex flex-col gap-2 md:items-end md:w-1/2">
+                            <ul className="flex flex-col gap-2 xl:items-end xl:w-1/2 text-right ">
                                 {pages.map((page) => (
                                     <li key={page.name}>
                                         {page.external ? (
@@ -158,7 +158,7 @@ const Navigation: React.FC = () => {
                             </ul>
                         </nav>
                         {/* Mobile footer, only visible when menu is open */}
-                        <div className={`flex md:hidden flex-col gap-1 text-center justify-between w-full px-4 pb-2 text-white text-xs font-primary tracking-wider transition-opacity duration-300 ${!open ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+                        <div className={`flex xl:hidden flex-col gap-1 text-center justify-between w-full px-4 pb-2 text-white text-xs font-primary tracking-wider transition-opacity duration-300 ${!open ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
                             <span>Ramón Morcillo - {new Date().getFullYear()}</span>
                             <span>Made with 💚 & ⏳</span>
                         </div>
@@ -166,7 +166,7 @@ const Navigation: React.FC = () => {
                 </div>
             </div>
             {/* Dual rotated footer items, fixed vertical center, left/right (improved for consistent layout) */}
-            <footer className="fixed hidden md:block z-10 w-screen top-1/2 left-0 -translate-y-1/2 pointer-events-none px-20">
+            <footer className="fixed hidden xl:block z-10 w-screen top-1/2 left-0 -translate-y-1/2 pointer-events-none px-20">
               <div className="relative w-full h-40">
                 {/* Left item */}
                 <div

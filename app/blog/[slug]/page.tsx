@@ -12,8 +12,9 @@ import ReactMarkdown from 'react-markdown';
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://golden-panda-1e2e39.netlify.app';
+  const siteUrl =  'https://golden-panda-1e2e39.netlify.app';
   const imageUrl = `${siteUrl}${post?.image}`;
+  console.log(imageUrl)
   return {
     title: post?.meta.title,
     description: post?.meta.description,
