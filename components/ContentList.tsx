@@ -72,7 +72,7 @@ interface ContentListProps {
 export function ContentList({ content, type = false }: ContentListProps) {
   return (
     <Tooltip.Provider delayDuration={0}>
-      <div className="space-y-6 ">
+      <div className="space-y-6 relative z-30">
         {content.map((item) => {
           const workType = item.type;
           const workLink = workType === 'project' && item.url ? item.url : `/blog/${item.slug}`;

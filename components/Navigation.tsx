@@ -91,7 +91,7 @@ const Navigation: React.FC = () => {
             </div>
 
             {/* Bottom Navigation */}
-            <div className="fixed bottom-0 w-full z-50 print:hidden min-h-12">
+            <div className="fixed bottom-0 w-full z-50 lg:z-30 print:hidden min-h-12">
                 <div
                     className={`
                     overflow-hidden
@@ -146,7 +146,7 @@ const Navigation: React.FC = () => {
                         </div>
                     )}
                     {/* Menu content, only visible when open or on desktop */}
-                    <div className={`${pathname === '/' ? 'bg-transparent' : 'bg-stone-950'} gap-4 justify-center flex flex-col transition-opacity duration-300 relative -mx-6 px-6 -mb-6 pb-6 ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'} xl:opacity-100 xl:pointer-events-auto relative z-10`}>
+                    <div className={`${pathname === '/' ? 'bg-transparent' : 'bg-stone-950 lg:bg-transparent z-0'} gap-4 justify-center flex flex-col transition-opacity duration-300 relative -mx-6 px-6 -mb-6 pb-6 ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'} xl:opacity-100 xl:pointer-events-auto relative `}>
                         {/* Two-column Menu: Social links and Navigation links */}
                         <nav className="flex justify-between pt-6">
                             {/* Social Links (left on desktop) */}
