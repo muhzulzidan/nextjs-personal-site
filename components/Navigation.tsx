@@ -2,8 +2,9 @@
 import React from "react"
 import { useState } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import HelpMessageContainer from './HelpMessageContainer';
+import { useStarColorStore } from "@/app/utils/starColorStore";
 
 
 interface MenuLinkProps {
@@ -27,12 +28,13 @@ const pages = [
 ]
 
 
-function MenuLink({ href, children }: MenuLinkProps) {
+function MenuLink({ href, children, onClick }: MenuLinkProps & { onClick?: () => void }) {
     const pathname = usePathname();
     const isActive = href === '/' ? pathname === '/' : pathname.startsWith(href);
     return (
         <Link
             href={href}
+            onClick={onClick}
             className={`menu-link relative text-[#ddd] font-normal pointer-events-auto transition-colors duration-100 leading-[1em] border-b-0 hover:underline${isActive ? ' active' : ''}`}
             aria-current={isActive ? 'page' : undefined}
         >
@@ -57,12 +59,25 @@ function MenuLink({ href, children }: MenuLinkProps) {
 const Navigation: React.FC = () => {
     const [open, setOpen] = useState(false)
     const pathname = usePathname();
+    const setRandomStarColor = useStarColorStore((state) => state.setRandomStarColor);
+    const router = useRouter();
     return (
         <>
             {/* Logo: fixed top left on desktop, bottom in nav on mobile */}
             {/* Desktop logo */}
-            <div className="hidden xl:block fixed top-0 left-0 z-20 px-20 py-16">
-                <Link href="/" className="block w-10 hover:scale-110 transition">
+            <div className="hidden xl:block fixed top-0 left-0 z-20 px-16 py-16">
+                <Link
+                    href="/"
+                    className="block w-10 hover:scale-110 transition"
+                    onClick={async (e) => {
+                        e.preventDefault();
+                        console.log('Index logo clicked');
+                        setRandomStarColor();
+                        // Wait a tick to allow state to propagate
+                        await new Promise((resolve) => setTimeout(resolve, 0));
+                        router.push('/');
+                    }}
+                >
                     <svg
                         width="32"
                         height="32"
@@ -93,8 +108,15 @@ const Navigation: React.FC = () => {
                         <div className="absolute inset-0 xl:hidden pointer-events-none z-0 bg-gradient-to-b from-transparent via-30% via-stone-950 to-stone-950/90" aria-hidden="true" />
                     )}
                     {/* Logo/toggle bar always at top of nav */}
-                    <div className="xl:hidden flex items-center justify-between w-full mb-2  relative z-10">
-                        <Link href="/" className="block w-10 hover:scale-110 transition">
+                    <div className="xl:hidden flex items-center justify-between w-full mb-2  relative z-10 ">
+                        <Link
+                            href="/"
+                            className="block w-10 hover:scale-110 transition"
+                            onClick={() => {
+                                console.log('Index logo clicked');
+                                setRandomStarColor();
+                            }}
+                        >
                             <svg
                                 width="32"
                                 height="32"
@@ -124,7 +146,7 @@ const Navigation: React.FC = () => {
                         </div>
                     )}
                     {/* Menu content, only visible when open or on desktop */}
-                    <div className={`gap-4 justify-center flex flex-col transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'} xl:opacity-100 xl:pointer-events-auto relative z-10`}>
+                    <div className={`${pathname === '/' ? 'bg-transparent' : 'bg-stone-950'} gap-4 justify-center flex flex-col transition-opacity duration-300 relative -mx-6 px-6 -mb-6 pb-6 ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'} xl:opacity-100 xl:pointer-events-auto relative z-10`}>
                         {/* Two-column Menu: Social links and Navigation links */}
                         <nav className="flex justify-between pt-6">
                             {/* Social Links (left on desktop) */}
@@ -151,7 +173,15 @@ const Navigation: React.FC = () => {
                                                 {page.name}
                                             </a>
                                         ) : (
-                                            <MenuLink href={page.href}>{page.name}</MenuLink>
+                                            <MenuLink
+                                                href={page.href}
+                                                onClick={page.name === "Index" ? (...args) => {
+                                                    console.log('Index link clicked', { args });
+                                                    setRandomStarColor();
+                                                } : undefined}
+                                            >
+                                                {page.name}
+                                            </MenuLink>
                                         )}
                                     </li>
                                 ))}
@@ -166,23 +196,23 @@ const Navigation: React.FC = () => {
                 </div>
             </div>
             {/* Dual rotated footer items, fixed vertical center, left/right (improved for consistent layout) */}
-            <footer className="fixed hidden xl:block z-10 w-screen top-1/2 left-0 -translate-y-1/2 pointer-events-none px-20">
-              <div className="relative w-full h-40">
-                {/* Left item */}
-                <div
-                  className="absolute left-0 top-1/2 -translate-y-1/2 origin-left -rotate-90 text-white text-xs font-primary tracking-wider pointer-events-auto"
-                  style={{ transformOrigin: 'left center' }}
-                >
-                  Ramón Morcillo - {new Date().getFullYear()}
+            <footer className="fixed hidden xl:block z-10 w-screen top-1/2 left-0 -translate-y-1/2 pointer-events-none px-16">
+                <div className="relative w-full h-40">
+                    {/* Left item */}
+                    <div
+                        className="absolute left-0 top-1/2 -translate-y-1/2 origin-left -rotate-90 text-white text-xs font-primary tracking-wider pointer-events-auto"
+                        style={{ transformOrigin: 'left center' }}
+                    >
+                        Ramón Morcillo - {new Date().getFullYear()}
+                    </div>
+                    {/* Right item */}
+                    <div
+                        className="absolute right-0 top-1/2 -translate-y-1/2 origin-right rotate-90 text-white text-xs font-primary tracking-wider pointer-events-auto pt-4"
+                        style={{ transformOrigin: 'right center' }}
+                    >
+                        Made with 💚 & ⏳
+                    </div>
                 </div>
-                {/* Right item */}
-                <div
-                  className="absolute right-0 top-1/2 -translate-y-1/2 origin-right rotate-90 text-white text-xs font-primary tracking-wider pointer-events-auto pt-4"
-                  style={{ transformOrigin: 'right center' }}
-                >
-                  Made with 💚 & ⏳
-                </div>
-              </div>
             </footer>
         </>
     )

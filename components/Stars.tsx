@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
+import { useStarColorStore } from "@/app/utils/starColorStore";
 import { getRandomBackground } from "@/app/utils";
 
 type Coordinates = {
@@ -18,10 +19,13 @@ interface StarsProps {
   normalVelocity?: number;
   containerOpacity?: number;
   addEventListeners?: boolean;
+  starColor?: string;
 }
 
 const Stars: React.FC<StarsProps> = (StarsConfig: StarsProps) => {
-  const { containerOpacity = 1, normalVelocity = 0.0005, addEventListeners = true } = StarsConfig;
+  const { containerOpacity = 1, normalVelocity = 0.0001, addEventListeners = true } = StarsConfig;
+  const starColor = useStarColorStore((state) => state.starColor);
+  const [backgroundImage, setBackgroundImage] = useState<string>("");
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // Mutable state as refs
@@ -134,11 +138,90 @@ const Stars: React.FC<StarsProps> = (StarsConfig: StarsProps) => {
   };
 
   useEffect(() => {
+    // When background changes, reset all starfield state
     const canvas = canvasRef.current;
     if (!canvas) return;
+
+    // Clean up all event listeners before resetting state
+    const cleanupListeners = () => {
+      canvas.removeEventListener("pointerdown", handlePointerDown);
+      canvas.removeEventListener("pointermove", handlePointerMove);
+      canvas.removeEventListener("pointerup", handlePointerUp);
+      canvas.removeEventListener("pointercancel", handlePointerUp);
+      canvas.removeEventListener("pointerout", handlePointerUp);
+      canvas.removeEventListener("pointerleave", handlePointerUp);
+      window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("resize", handleResize);
+      canvas.removeEventListener("mousemove", handleMouseMove);
+      canvas.removeEventListener("touchmove", handleTouchMove);
+      canvas.removeEventListener("touchend", handleTouchLeave);
+      document.removeEventListener("mouseleave", handleMouseLeave);
+    };
+
+    // Event handlers (must be defined outside so cleanup can access them)
+    function handleMouseMove(event: MouseEvent) {
+      cursorInsideCanvas.current = true;
+      movePointer(event.clientX, event.clientY);
+    }
+    function handleTouchMove(event: TouchEvent) {
+      cursorInsideCanvas.current = true;
+      movePointer(event.touches[0].clientX, event.touches[0].clientY);
+      event.preventDefault();
+    }
+    function handleMouseLeave() {
+      cursorInsideCanvas.current = false;
+      pointer.current = { x: null, y: null };
+    }
+    function handleTouchLeave() {
+      cursorInsideCanvas.current = false;
+      pointer.current = { x: null, y: null };
+    }
+    function handleResize() {
+      resizeCanvas(canvasRef.current);
+    }
+    function handleWheel(event: WheelEvent) {
+      accelerate(event.deltaY < 0);
+    }
+    function handlePointerDown(event: PointerEvent) {
+      evCache.current.push(event);
+    }
+    function handlePointerMove(event: PointerEvent) {
+      for (let i = 0; i < evCache.current.length; i++) {
+        if (event.pointerId === evCache.current[i].pointerId) {
+          evCache.current[i] = event;
+          break;
+        }
+      }
+      if (evCache.current.length === 2) {
+        const currentPointersDistance = Math.abs(evCache.current[0].clientX - evCache.current[1].clientX);
+        accelerate(prevPointersDistance.current > 0 && currentPointersDistance > prevPointersDistance.current);
+        prevPointersDistance.current = currentPointersDistance;
+      }
+    }
+    function removeEvent(event: PointerEvent) {
+      evCache.current = evCache.current.filter((evCached) => evCached.pointerId !== event.pointerId);
+    }
+    function handlePointerUp(event: PointerEvent) {
+      removeEvent(event);
+      if (evCache.current.length < 2) prevPointersDistance.current = -1;
+    }
+
+    // Remove listeners before resetting state (in case effect is re-run)
+    cleanupListeners();
+
+    setBackgroundImage(getRandomBackground(starColor));
+
+    // Reset all refs
+    stars.current = [];
+    velocity.current = { x: 0, y: 0, tx: 0, ty: 0, z: normalVelocity };
+    pointer.current = { x: null, y: null };
+    cursorInsideCanvas.current = false;
+    pointerActive.current = true;
+    evCache.current = [];
+    prevPointersDistance.current = -1;
+
     const renderCtx = canvas.getContext("2d");
     if (!renderCtx) return;
-    // setContext(renderCtx);
     generateStars();
     resizeCanvas(canvas);
 
@@ -177,63 +260,16 @@ const Stars: React.FC<StarsProps> = (StarsConfig: StarsProps) => {
         }
       });
     };
+    let animationFrameId: number;
     const step = () => {
       renderCtx.clearRect(0, 0, windowWidth.current, windowHeight.current);
       update();
       renderStars();
-      requestAnimationFrame(step);
+      animationFrameId = requestAnimationFrame(step);
     };
     step();
 
-    // Event handlers
-    const handleMouseMove = (event: MouseEvent) => {
-      cursorInsideCanvas.current = true;
-      movePointer(event.clientX, event.clientY);
-    };
-    const handleTouchMove = (event: TouchEvent) => {
-      cursorInsideCanvas.current = true;
-      movePointer(event.touches[0].clientX, event.touches[0].clientY);
-      event.preventDefault();
-    };
-    const handleMouseLeave = () => {
-      cursorInsideCanvas.current = false;
-      pointer.current = { x: null, y: null };
-    };
-    const handleTouchLeave = () => {
-      cursorInsideCanvas.current = false;
-      pointer.current = { x: null, y: null };
-    };
-    const handleResize = () => {
-      resizeCanvas(canvasRef.current);
-    };
-    const handleWheel = (event: WheelEvent) => {
-      accelerate(event.deltaY < 0);
-    };
-    // Pointer events for pinch/zoom
-    const handlePointerDown = (event: PointerEvent) => {
-      evCache.current.push(event);
-    };
-    const handlePointerMove = (event: PointerEvent) => {
-      for (let i = 0; i < evCache.current.length; i++) {
-        if (event.pointerId === evCache.current[i].pointerId) {
-          evCache.current[i] = event;
-          break;
-        }
-      }
-      if (evCache.current.length === 2) {
-        const currentPointersDistance = Math.abs(evCache.current[0].clientX - evCache.current[1].clientX);
-        accelerate(prevPointersDistance.current > 0 && currentPointersDistance > prevPointersDistance.current);
-        prevPointersDistance.current = currentPointersDistance;
-      }
-    };
-    const removeEvent = (event: PointerEvent) => {
-      evCache.current = evCache.current.filter((evCached) => evCached.pointerId !== event.pointerId);
-    };
-    const handlePointerUp = (event: PointerEvent) => {
-      removeEvent(event);
-      if (evCache.current.length < 2) prevPointersDistance.current = -1;
-    };
-
+    // Attach event listeners
     if (addEventListeners) {
       canvas.addEventListener("pointerdown", handlePointerDown);
       canvas.addEventListener("pointermove", handlePointerMove);
@@ -248,18 +284,15 @@ const Stars: React.FC<StarsProps> = (StarsConfig: StarsProps) => {
       canvas.addEventListener("touchend", handleTouchLeave);
       document.addEventListener("mouseleave", handleMouseLeave);
     }
+
+    // Cleanup
     return () => {
+      // Cancel animation frame
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
       stars.current.length = 0;
-      if (canvas) {
-        canvas.removeEventListener("mousemove", handleMouseMove);
-        canvas.removeEventListener("touchmove", handleTouchMove);
-        canvas.removeEventListener("touchend", handleTouchLeave);
-        window.removeEventListener("wheel", handleWheel);
-        window.removeEventListener("resize", handleResize);
-        document.removeEventListener("mouseleave", handleMouseLeave);
-      }
+      cleanupListeners();
     };
-  }, [addEventListeners, normalVelocity]);
+  }, [addEventListeners, normalVelocity, starColor]);
 
   return (
     <canvas
@@ -267,7 +300,7 @@ const Stars: React.FC<StarsProps> = (StarsConfig: StarsProps) => {
       className="fixed top-0 left-0 w-full h-full"
       style={{
         opacity: containerOpacity,
-        background: getRandomBackground(),
+        backgroundImage,
       }}
     />
   );

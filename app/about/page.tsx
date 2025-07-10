@@ -3,13 +3,13 @@ import Image from 'next/image';
 
 const About: React.FC = () => {
     return (
-        <div className="max-w-5xl mx-auto mt-44 mb-20 px-4 relative">
+        <div className="max-w-6xl mx-auto mt-12 lg:mt-44 mb-20 px-4 relative">
             <div className="text-xl md:text-2xl sm:text-xl leading-snug text-left font-light mb-8">
                 <h2 className="font-thin">
                     Hey, I am Ramón <span role="img" aria-label="waving hand">👋</span>
                 </h2>
             </div>
-            <section className="leading-12 text-gray-300">
+            <section className="prose prose-invert max-w-none text-gray-300">
                 <p>
                     Problem solver and experienced maker with a passion for excellence and pragmatism.
                 </p>
