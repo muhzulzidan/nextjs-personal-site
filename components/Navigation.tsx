@@ -207,7 +207,7 @@ const Navigation: React.FC = () => {
                     </div>
                     {/* Right item */}
                     <div
-                        className="absolute right-0 top-1/2 -translate-y-1/2 origin-right rotate-90 text-white text-xs font-primary tracking-wider pointer-events-auto pt-4"
+                        className="absolute right-0 top-1/2 -translate-y-1/2 origin-right rotate-90 text-white text-xs font-primary tracking-wider pointer-events-auto pt-0 -mr-3"
                         style={{ transformOrigin: 'right center' }}
                     >
                         Made with 💚 & ⏳

@@ -214,7 +214,7 @@ const WorkExperience = () => (
                 href={work.companyUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="cursor-pointer no-underline transition-colors ease-in duration-200 font-bold text-white border-b border-dashed border-white hover:border-solid"
+                className="cursor-pointer underline underline-offset-2 decoration-dashed decoration-white decoration-[1px] hover:decoration-solid transition-colors ease-in duration-200 font-bold text-white"
               >
                 {work.company}
               </a>
@@ -242,7 +242,7 @@ const ProjectHighlights = () => (
               href={project.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="cursor-pointer no-underline transition-colors ease-in duration-200 font-bold text-white border-b border-dashed border-white hover:border-solid"
+              className="cursor-pointer underline underline-offset-2 decoration-dashed decoration-white decoration-[1px] hover:decoration-solid transition-colors ease-in duration-200 font-bold text-white"
             >
               {project.name}
             </a>
@@ -291,12 +291,14 @@ export default function ResumePage() {
           <div className="pr-4">
             <h2 className="font-bold text-2xl mt-0">
               Ramón Morcillo{" "}
-              <button
-                className="cursor-pointer no-underline transition-colors ease-in duration-200 font-bold text-white border-b border-dashed border-white hover:border-solid text-[1.4rem] no-print print:hidden"
-                onClick={() => window.print()}
+              <a
+                href="/Resume_ramonmorcillo.com.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="cursor-pointer underline underline-offset-2 decoration-dashed decoration-white hover:decoration-solid transition-colors ease-in duration-200 font-bold text-white text-[1.4rem] no-print print:hidden"
               >
                 (PDF)
-              </button>
+              </a>
             </h2>
            <div className="flex flex-col my-4 gap-4">
               <p className="mt-0">
@@ -313,7 +315,7 @@ export default function ResumePage() {
               <a
                 href="mailto:hey@ramonmorcillo.com?subject=Hi%20there!"
                 rel="noopener"
-                className="cursor-pointer no-underline transition-colors ease-in duration-200 font-bold text-white border-b border-dashed border-white hover:border-solid print:text-black print:border-black print:border-b print:border-solid"
+                className="cursor-pointer underline underline-offset-2 decoration-dashed decoration-white decoration-[1px] hover:decoration-solid transition-colors ease-in duration-200 font-bold text-white print:text-black print:border-black print:border-b print:border-solid"
               >
                 hey@ramonmorcillo.com
               </a>
@@ -324,7 +326,7 @@ export default function ResumePage() {
                 href="https://www.ramonmorcillo.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="cursor-pointer no-underline transition-colors ease-in duration-200 font-bold text-white border-b border-dashed border-white hover:border-solid print:text-black print:border-black print:border-b print:border-solid"
+                className="cursor-pointer underline underline-offset-2 decoration-dashed decoration-white decoration-[1px] hover:decoration-solid transition-colors ease-in duration-200 font-bold text-white print:text-black print:border-black print:border-b print:border-solid"
               >
                 ramonmorcillo.com
               </a>
@@ -335,7 +337,7 @@ export default function ResumePage() {
                 href="https://www.linkedin.com/in/ramon-morcillo/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="cursor-pointer no-underline transition-colors ease-in duration-200 font-bold text-white border-b border-dashed border-white hover:border-solid print:text-black print:border-black print:border-b print:border-solid"
+                className="cursor-pointer underline underline-offset-2 decoration-dashed decoration-white decoration-[1px] hover:decoration-solid transition-colors ease-in duration-200 font-bold text-white print:text-black print:border-black print:border-b print:border-solid"
               >
                 LinkedIn
               </a>
@@ -346,7 +348,7 @@ export default function ResumePage() {
                 href="https://www.ramonmorcillo.com/resume"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="cursor-pointer no-underline transition-colors ease-in duration-200 font-bold text-white border-b border-dashed border-white hover:border-solid print:text-black print:border-black print:border-b print:border-solid"
+                className="cursor-pointer underline underline-offset-2 decoration-dashed decoration-white decoration-[1px] hover:decoration-solid transition-colors ease-in duration-200 font-bold text-white print:text-black print:border-black print:border-b print:border-solid"
               >
                 Live version
               </a>
@@ -401,7 +403,7 @@ export default function ResumePage() {
             What others say about me
           </h3>
           <a
-            className="no-print print:hidden cursor-pointer no-underline transition-colors ease-in duration-200 font-bold text-white border-b border-dashed border-white hover:border-solid text-sm mt-2 sm:mt-0 print:text-black print:border-black print:border-b print:border-solid"
+            className="no-print print:hidden cursor-pointer underline underline-offset-2 decoration-dashed decoration-white decoration-[1px] hover:decoration-solid transition-colors ease-in duration-200 font-bold text-white text-sm mt-2 sm:mt-0 print:text-black print:border-black print:border-b print:border-solid"
             href="https://www.linkedin.com/recs/give/?senderId=ramon-morcillo"
             target="_blank"
             rel="noopener noreferrer"
@@ -415,7 +417,7 @@ export default function ResumePage() {
             href="https://www.ramonmorcillo.com/resume/#what-others-say"
             target="_blank"
             rel="noopener noreferrer"
-            className="cursor-pointer no-underline transition-colors ease-in duration-200 font-bold text-white border-b border-dashed border-white hover:border-solid print:text-black print:border-black print:border-b print:border-solid"
+            className="cursor-pointer underline underline-offset-2 decoration-dashed decoration-white decoration-[1px] hover:decoration-solid transition-colors ease-in duration-200 font-bold text-white print:text-black print:border-black print:border-b print:border-solid"
           >
             the resume live version
           </a>
