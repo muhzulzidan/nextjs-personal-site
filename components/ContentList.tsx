@@ -51,6 +51,7 @@ function CursorTooltip({ image, alt, children }: { image: string, alt: string, c
       )}
     </span>
   );
+// End of CursorTooltip
 }
 
 export interface ContentListItem {
@@ -76,27 +77,29 @@ export function ContentList({ content, type = false }: ContentListProps) {
         {content.map((item) => {
           const workType = item.type;
           const workLink = workType === 'project' && item.url ? item.url : `/blog/${item.slug}`;
-          return (
-            item.image ? (
+          if (item.image) {
+            return (
               <CursorTooltip image={item.image ?? ''} alt={item.title} key={item.slug}>
                 <Link
                   href={workLink}
                   target="_blank"
-                  className="transition duration-200 ease-in-out p-4 rounded-[5px] flex flex-wrap justify-between relative hover:bg-white/10 cursor-pointer"
+                  className="transition duration-200 ease-in-out p-4 rounded-[5px] flex flex-col md:flex-row md:items-center flex-wrap justify-between relative hover:bg-white/10 cursor-pointer"
                   tabIndex={0}
                   role="button"
                   aria-label={item.title}
                 >
-                  <div className="max-w-[70%] flex-1 md:max-w-full flex flex-col">
+                  {/* Date on top for mobile only */}
+                  <div className="block md:hidden text-white text-lg mb-1 font-light">{item.date.match(/\d{4}/)?.[0]}</div>
+                  <div className=" flex-1 md:max-w-full flex flex-col">
                     <Link
                       href={workLink}
                       target="_blank"
-                      className="text-[1.15rem] font-medium text-white border-b-0 hover:underline "
+                      className="text-xl font-medium text-white border-b-0 hover:underline "
                     >
                       {item.title}
                     </Link>
                     {item.description && (
-                      <div className="text-gray-400 text-base font-normal border-b-0 block py-2">
+                      <div className="text-gray-400 text-lg font-normal border-b-0 block py-2">
                         {item.description}
                       </div>
                     )}
@@ -108,40 +111,47 @@ export function ContentList({ content, type = false }: ContentListProps) {
                           {workType}
                         </span>
                       )}
-                      {item.tags?.sort().map((tag) => (
-                        <Link
-                          href={`/tags/${slugify(tag, { lower: true, strict: true })}`}
-                          key={tag}
-                          className="px-2 py-1 rounded-full text-xs bg-white/20 text-white hover:bg-white hover:text-black transition-colors font-semibold"
-                        >
-                          {tag}
-                        </Link>
-                      ))}
+                      {item.tags?.sort().map((tag) => {
+                        return (
+                          <Link
+                            href={`/tags/${slugify(tag, { lower: true, strict: true })}`}
+                            key={tag}
+                            className="px-2 py-1 rounded-full text-xs bg-white/20 text-white hover:bg-white hover:text-black transition-colors font-semibold"
+                          >
+                            {tag}
+                          </Link>
+                        );
+                      })}
                     </div>
                   </div>
-                  <div className="md:text-right mt-2 md:mt-0 md:w-40 text-gray-500 text-sm max-w-[30%] md:max-w-full pt-4 pb-2">
+                  {/* Date on the right for desktop only */}
+                  <div className="hidden md:block md:text-right md:mt-0 md:w-40 text-gray-500 text-sm max-w-[30%] md:max-w-full pt-4 pb-2">
                     {item.date}
                   </div>
                 </Link>
               </CursorTooltip>
-            ) : (
+            );
+          } else {
+            return (
               <div
-                className="transition duration-200 ease-in-out p-4 rounded-[5px] flex flex-wrap justify-between relative hover:bg-white/10 cursor-pointer"
+                className="transition duration-200 ease-in-out p-4 rounded-[5px] flex flex-col md:flex-row md:items-center flex-wrap justify-between relative hover:bg-white/10 cursor-pointer"
                 tabIndex={0}
                 role="button"
                 aria-label={item.title}
                 key={item.slug}
               >
-                <div className="max-w-[70%] flex-1 md:max-w-full flex flex-col">
+                {/* Date on top for mobile only */}
+                <div className="block md:hidden text-white text-lg mb-1 font-light">{item.date.match(/\d{4}/)?.[0]}</div>
+                <div className=" flex-1 md:max-w-full flex flex-col">
                   <Link
                     href={workLink}
                     target="_blank"
-                    className="text-[1.15rem] font-medium text-white border-b-0 hover:underline "
+                    className="text-xl font-medium text-white border-b-0 hover:underline "
                   >
                     {item.title}
                   </Link>
                   {item.description && (
-                    <div className="text-gray-400 text-base font-normal border-b-0 block py-2">
+                    <div className="text-gray-400 text-lg font-normal border-b-0 block py-2">
                       {item.description}
                     </div>
                   )}
@@ -153,23 +163,26 @@ export function ContentList({ content, type = false }: ContentListProps) {
                         {workType}
                       </span>
                     )}
-                    {item.tags?.sort().map((tag) => (
-                      <Link
-                        href={`/tags/${slugify(tag, { lower: true, strict: true })}`}
-                        key={tag}
-                        className="px-2 py-1 rounded-full text-xs bg-white/20 text-white hover:bg-white hover:text-black transition-colors font-semibold"
-                      >
-                        {tag}
-                      </Link>
-                    ))}
+                    {item.tags?.sort().map((tag) => {
+                      return (
+                        <Link
+                          href={`/tags/${slugify(tag, { lower: true, strict: true })}`}
+                          key={tag}
+                          className="px-2 py-1 rounded-full text-xs bg-white/20 text-white hover:bg-white hover:text-black transition-colors font-semibold"
+                        >
+                          {tag}
+                        </Link>
+                      );
+                    })}
                   </div>
                 </div>
-                <div className="md:text-right mt-2 md:mt-0 md:w-40 text-gray-500 text-sm max-w-[30%] md:max-w-full pt-4 pb-2">
+                {/* Date on the right for desktop only */}
+                <div className="hidden md:block md:text-right md:mt-0 md:w-40 text-gray-500 text-sm max-w-[30%] md:max-w-full pt-4 pb-2">
                   {item.date}
                 </div>
               </div>
-            )
-          );
+            );
+          }
         })}
       </div>
     </Tooltip.Provider>

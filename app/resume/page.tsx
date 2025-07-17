@@ -2,6 +2,7 @@
 
 import React from "react";
 
+
 // --- Data ---
 const workExperiences = [
   {
@@ -202,100 +203,105 @@ I wholeheartedly recommend Ramon to any team seeking a front-end developer who b
   },
 ];
 
-const WorkExperience = () => (
-  <div className="flex flex-col gap-4 mt-4">
-    {workExperiences.map((work) => (
-      <div key={work.company} className="flex flex-col">
-        <div className="flex flex-col sm:flex-row justify-between gap-2 text-[1.2rem]">
-          <div className="font-semibold">
-            <div className="flex flex-col">
-              <p className="font-medium m-0 text-[1.2rem]">{work.position}</p>
-              <a
-                href={work.companyUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="cursor-pointer underline underline-offset-2 decoration-dashed decoration-white decoration-[1px] hover:decoration-solid transition-colors ease-in duration-200 font-bold text-white"
-              >
-                {work.company}
-              </a>
+const WorkExperience = () => {
+  return (
+    <div className="flex flex-col gap-4 mt-4">
+      {workExperiences.map((work) => (
+        <div key={work.company} className="flex flex-col">
+          <div className="flex flex-col sm:flex-row justify-between gap-2 text-[1.2rem]">
+            <div className="font-semibold">
+              <div className="flex flex-col">
+                <p className="font-medium m-0 text-[1.2rem]">{work.position}</p>
+                <a
+                  href={work.companyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="cursor-pointer underline underline-offset-2 decoration-dashed decoration-white decoration-[1px] hover:decoration-solid transition-colors ease-in duration-200 font-bold text-white print:text-black print:border-b print:w-fit"
+                >
+                  {work.company}
+                </a>
+              </div>
+            </div>
+            <div className="text-[.9rem] mt-[.2rem]">
+              <small>
+                {work.startDate} - {work.endDate}
+              </small>
             </div>
           </div>
-          <div className="text-[.9rem] mt-[.2rem]">
-            <small>
-              {work.startDate} - {work.endDate}
-            </small>
-          </div>
+          <p className="whitespace-pre-wrap mt-2 text-base">{work.description}</p>
         </div>
-        <p className="whitespace-pre-wrap mt-2 text-base">{work.description}</p>
-      </div>
-    ))}
-  </div>
-);
+      ))}
+    </div>
+  );
+};
 
-const ProjectHighlights = () => (
-  <div className="flex flex-col gap-4 mt-4">
-    {projects.map((project) => (
-      <div key={project.name} className="flex flex-col">
-        <div className="flex flex-col sm:flex-row justify-between gap-2 text-[1.2rem]">
-          <div className="font-semibold">
-            <a
-              href={project.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="cursor-pointer underline underline-offset-2 decoration-dashed decoration-white decoration-[1px] hover:decoration-solid transition-colors ease-in duration-200 font-bold text-white"
-            >
-              {project.name}
-            </a>
+const ProjectHighlights = () => {
+  return (
+    <div className="flex flex-col gap-4 mt-4">
+      {projects.map((project) => (
+        <div key={project.name} className="flex flex-col">
+          <div className="flex flex-col sm:flex-row justify-between gap-2 text-[1.2rem]">
+            <div className="font-semibold">
+              <a
+                href={project.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="cursor-pointer underline underline-offset-2 decoration-dashed decoration-white decoration-[1px] hover:decoration-solid transition-colors ease-in duration-200 font-bold text-white print:text-black print:border-b print:w-fit"
+              >
+                {project.name}
+              </a>
+            </div>
+            <div>
+              <small>{project.year}</small>
+            </div>
           </div>
-          <div>
-            <small>{project.year}</small>
-          </div>
+          <p className="mt-2 mb-0">{project.description}</p>
         </div>
-        <p className="mt-2 mb-0">{project.description}</p>
-      </div>
-    ))}
-  </div>
-);
+      ))}
+    </div>
+  );
+};
 
-const WhatOthersSay = () => (
-  <div className="flex flex-col gap-8 mt-6">
-    {quotes.map((quote) => (
-      <div
-        key={quote.author}
-        className="flex gap-8 items-start no-print"
-        style={{ marginTop: "1rem" }}
-      >
-        <img
-          src={quote.image}
-          alt={quote.author}
-          className="rounded-full"
-          width={60}
-          height={60}
-          style={{ minWidth: 60, minHeight: 60 }}
-        />
-        <p className="whitespace-pre-wrap mt-0">
-          <em>“ {quote.text} ”</em>
-          <br />— <strong>{quote.author}, {quote.position}</strong>
-        </p>
-      </div>
-    ))}
-  </div>
-);
+const WhatOthersSay = () => {
+  return (
+    <div className="flex flex-col gap-8 mt-6">
+      {quotes.map((quote) => (
+        <div
+          key={quote.author}
+          className="flex gap-8 items-start print:hidden"
+          style={{ marginTop: "1rem" }}
+        >
+          <img
+            src={quote.image}
+            alt={quote.author}
+            className="rounded-full print:hidden"
+            width={60}
+            height={60}
+            style={{ minWidth: 60, minHeight: 60 }}
+          />
+          <p className="whitespace-pre-wrap mt-0">
+            <em>“ {quote.text} ”</em>
+            <br />— <strong>{quote.author}, {quote.position}</strong>
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 export default function ResumePage() {
   return (
     <>
-      <section className="flex flex-col px-6 py-10 max-w-5xl mx-auto rounded-lg shadow-lg mt-24 mb-20 print:bg-white print:shadow-none print:mt-0 print:mb-0 print:m-0 prose-invert">
+      <section className="flex flex-col px-6 py-10 max-w-5xl mx-auto rounded-lg shadow-lg mt-24 mb-20 print:bg-white print:shadow-none print:mt-0 print:mb-0 print:m-0 prose-invert print:font-medium print:px-0 print:py-2">
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between">
           <div className="pr-4">
             <h2 className="font-bold text-2xl mt-0">
               Ramón Morcillo{" "}
               <a
-                href="/Resume_ramonmorcillo.com.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
+                style={{ fontWeight: 500, fontSize: '1.4rem' }}
                 className="cursor-pointer underline underline-offset-2 decoration-dashed decoration-white hover:decoration-solid transition-colors ease-in duration-200 font-bold text-white text-[1.4rem] no-print print:hidden"
+                onClick={() => window.print()}
               >
                 (PDF)
               </a>
@@ -403,7 +409,7 @@ export default function ResumePage() {
             What others say about me
           </h3>
           <a
-            className="no-print print:hidden cursor-pointer underline underline-offset-2 decoration-dashed decoration-white decoration-[1px] hover:decoration-solid transition-colors ease-in duration-200 font-bold text-white text-sm mt-2 sm:mt-0 print:text-black print:border-black print:border-b print:border-solid"
+            className="cursor-pointer underline underline-offset-2 decoration-dashed decoration-white decoration-[1px] hover:decoration-solid transition-colors ease-in duration-200 font-bold text-white text-sm mt-2 sm:mt-0 print:hidden"
             href="https://www.linkedin.com/recs/give/?senderId=ramon-morcillo"
             target="_blank"
             rel="noopener noreferrer"
@@ -417,7 +423,7 @@ export default function ResumePage() {
             href="https://www.ramonmorcillo.com/resume/#what-others-say"
             target="_blank"
             rel="noopener noreferrer"
-            className="cursor-pointer underline underline-offset-2 decoration-dashed decoration-white decoration-[1px] hover:decoration-solid transition-colors ease-in duration-200 font-bold text-white print:text-black print:border-black print:border-b print:border-solid"
+            className="underline underline-offset-2 decoration-dashed decoration-black decoration-[1px] print:text-black print:border-black print:border-b print:border-solid"
           >
             the resume live version
           </a>

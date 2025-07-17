@@ -5,7 +5,6 @@ import { useStarColorStore } from "./utils/starColorStore";
 
 export default function Home() {
   const starColor = useStarColorStore((state) => state.starColor);
-  console.log('Home render, starColor:', starColor);
   return (
     <div>
       <Stars starColor={starColor} />
