@@ -1,10 +1,16 @@
 
+
 import { getPostBySlug, getPostSlugs } from '@/lib/md';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import slugify from 'slugify';
 import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
+// import dynamic from 'next/dynamic';
+
+import CommentsContainer from "@/components/CommentsContainer"
+
+// const CommentsContainer = dynamic(() => import('@/components/CommentsContainer'), { ssr: false });
 
 
 
@@ -43,6 +49,15 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const post = await getPostBySlug(slug);
   if (!post) return notFound();
 
+  // Dummy previous/next logic: replace with your own logic to fetch previous/next posts
+  const allPosts = await getPostSlugs();
+  const idx = allPosts.findIndex((s) => s === slug);
+  const previousSlug = idx > 0 ? allPosts[idx - 1] : null;
+  const nextSlug = idx < allPosts.length - 1 ? allPosts[idx + 1] : null;
+  // You may want to fetch titles for previous/next posts
+  const previousPost = previousSlug ? await getPostBySlug(previousSlug) : null;
+  const nextPost = nextSlug ? await getPostBySlug(nextSlug) : null;
+
   return (
     <div className="max-w-4xl w-full mx-auto mt-24 mb-20 px-4 relative z-30">
       <article>
@@ -70,8 +85,28 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         <div className="prose-invert prose-lg max-w-none">
           <ReactMarkdown>{post.content}</ReactMarkdown>
         </div>
-        <div className="h-40" /> {/* Bottom spacing */}
+       
       </article>
+      <CommentsContainer commentsUrl={post.meta.commentsUrl ?? ''} />
+
+      {/* Other posts section */}
+      <h2 className="mt-12 mb-4 text-2xl font-thin">Other posts</h2>
+      <ul className="flex gap-2 list-none p-0 mb-8 w-full justify-between">
+        {previousPost && (
+          <li className="w-1/2 text-left p-4">
+            <Link href={`/blog/${previousPost.slug}`} rel="prev" className="underline underline-offset-2 decoration-dashed decoration-white decoration-[1px] hover:decoration-solid transition-colors font-semibold text-white">
+              ← {previousPost.meta.title}
+            </Link>
+          </li>
+        )}
+        {nextPost && (
+          <li className="w-1/2 text-right p-4">
+            <Link href={`/blog/${nextPost.slug}`} rel="next" className="underline underline-offset-2 decoration-dashed decoration-white decoration-[1px] hover:decoration-solid transition-colors font-semibold text-white">
+              {nextPost.meta.title} →
+            </Link>
+          </li>
+        )}
+      </ul>
     </div>
   );
 }

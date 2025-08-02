@@ -91,27 +91,22 @@ const Navigation: React.FC = () => {
             </div>
 
             {/* Bottom Navigation */}
-            <div className="fixed bottom-0 w-full z-50 lg:z-30 print:hidden min-h-12">
+            <div className={`fixed bottom-0 w-full print:hidden min-h-12 z-[99999999] pointer-events-none ${ open ? '' : 'h-[0px]'} `}>
                 <div
-                    className={`
-                    overflow-hidden
-                    transition-all duration-500 ease-[cubic-bezier(0.45,0,0.1,1)]
-                    flex flex-col
-                    relative
-                    ${open ? 'max-h-[800px] pt-24 px-6 xl:px-12 py-6' : 'max-h-[56px] px-6  xl:px-12 py-0 pt-0'}
-                    xl:max-h-none xl:overflow-visible xl:transition-none xl:px-12  xl:py-12 xl:block
-                    `}
+                    className={`overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.45,0,0.1,1)] flex flex-col relative
+                    ${open ? 'max-h-[800px] pt-24 px-6 xl:px-12 py-6' : 'max-h-[56px] px-6 xl:px-12 py-0 pt-0'}
+                    xl:max-h-none xl:overflow-visible xl:transition-none xl:px-12 xl:py-12 xl:block`}
                     style={{ maxHeight: undefined }}
                 >
-                    {/* Mobile gradient overlay: dark BG + fade, only on mobile and not on home */}
-                    {pathname !== '/' && (
-                        <div className="absolute inset-0 xl:hidden pointer-events-none z-0 bg-gradient-to-b from-transparent via-30% via-stone-950 to-stone-950/90" aria-hidden="true" />
+                    {/* Overlay for readability, does not block pointer events */}
+                    {pathname !== '/' && open && (
+                        <div className="absolute inset-0 bg-stone-950/80 pointer-events-none z-30 transition-opacity duration-300" aria-hidden="true" />
                     )}
                     {/* Logo/toggle bar always at top of nav */}
-                    <div className="xl:hidden flex items-center justify-between w-full mb-2  relative z-10 ">
+                    <div className="xl:hidden flex items-center justify-between w-full mb-2 relative z-[99999999]">
                         <Link
                             href="/"
-                            className="block w-10 hover:scale-110 transition"
+                            className="block w-10 hover:scale-110 transition pointer-events-auto z-[99999999]"
                             onClick={() => {
                                 console.log('Index logo clicked');
                                 setRandomStarColor();
@@ -128,7 +123,7 @@ const Navigation: React.FC = () => {
                             </svg>
                         </Link>
                         <div
-                            className={`flex flex-col justify-between items-end w-7 h-[15px] cursor-pointer transition-transform duration-300 z-40 ${open ? "rotate-90" : ""}`}
+                            className={`flex flex-col justify-between items-end w-7 h-[15px] cursor-pointer transition-transform duration-300 z-[99999999] pointer-events-auto ${open ? "rotate-90" : ""}`}
                             onClick={() => setOpen(!open)}
                         >
                             <span className={`h-[1px] bg-white transition-all ${open ? "w-[60%]" : "w-full"}`} />
@@ -137,37 +132,35 @@ const Navigation: React.FC = () => {
                         </div>
                     </div>
                     {/* HelpMessageContainer: show when menu is closed on mobile, always on desktop */}
-                    {/* <div className="w-full flex justify-center items-center mb-2 absolute right-1/2 translate-x-1/2 bottom-10 z-10">
-                        <HelpMessageContainer show={!open ? false : true} />
-                    </div> */}
                     {pathname === '/' && (
-                        <div className=" flex justify-center items-center mb-2 fixed w-8/12 right-1/2 translate-x-1/2 bottom-4 z-10">
+                        <div className="flex justify-center items-center mb-2 fixed w-8/12 right-1/2 translate-x-1/2 bottom-4 z-[99999999] pointer-events-none">
                             <HelpMessageContainer show={open ? false : true} />
                         </div>
                     )}
                     {/* Menu content, only visible when open or on desktop */}
-                    <div className={`${pathname === '/' ? 'bg-transparent' : 'bg-stone-950 lg:bg-transparent z-0'} gap-4 justify-center flex flex-col transition-opacity duration-300 relative -mx-6 px-6 -mb-6 pb-6 ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'} xl:opacity-100 xl:pointer-events-auto relative `}>
+                    <div className={`gap-4 justify-center flex flex-col transition-opacity duration-300 relative -mx-6 px-6 -mb-6 pb-6 ${pathname === '/' ? "" :"bg-stone-950"} ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'} xl:opacity-100 xl:pointer-events-auto relative z-[99999999]`}
+                    >
                         {/* Two-column Menu: Social links and Navigation links */}
                         <nav className="flex justify-between pt-6">
                             {/* Social Links (left on desktop) */}
-                            <ul className="flex flex-col gap-2 xl:mb-0 xl:w-1/2 xl:items-start">
+                            <ul className={`flex flex-col gap-2 xl:mb-0 xl:w-fit z-[99999999] xl:items-start ${open ? '' : 'fixed bottom-12 left-12'} `}>
                                 {socialLinks.map((social) => (
                                     <li key={social.name}>
                                         <a href={social.socialUrl} target="_blank" rel="noopener noreferrer"
-                                            className="text-[#ddd] font-normal pointer-events-auto transition-colors duration-100 leading-[1em] border-b-0 cursor-pointer no-underline focus:outline-none hover:text-white hover:font-semibold hover:border-b-0">
+                                            className="text-[#ddd] font-normal pointer-events-auto transition-colors duration-100 leading-[1em] border-b-0 cursor-pointer no-underline focus:outline-none hover:text-white hover:font-semibold hover:border-b-0 z-[99999999]">
                                             {social.name}
                                         </a>
                                     </li>
                                 ))}
                             </ul>
                             {/* Navigation Links (right on desktop) */}
-                            <ul className="flex flex-col gap-2 xl:items-end xl:w-1/2 text-right ">
+                            <ul className={`flex flex-col gap-2 xl:items-end xl:w-fit z-[99999999] text-right ${open ? '' : 'fixed bottom-12 right-12'} `}>
                                 {pages.map((page) => (
                                     <li key={page.name}>
                                         {page.external ? (
                                             <a
                                                 href={page.href}
-                                                className="menu-link text-[#ddd] font-normal pointer-events-auto transition-colors duration-100 leading-[1em] border-b-0 hover:underline"
+                                                className="menu-link text-[#ddd] font-normal pointer-events-auto transition-colors duration-100 leading-[1em] border-b-0 hover:underline z-[99999999]"
                                                 rel="noopener"
                                             >
                                                 {page.name}
@@ -188,7 +181,7 @@ const Navigation: React.FC = () => {
                             </ul>
                         </nav>
                         {/* Mobile footer, only visible when menu is open */}
-                        <div className={`flex xl:hidden flex-col gap-1 text-center justify-between w-full px-4 pb-2 text-white text-xs font-primary tracking-wider transition-opacity duration-300 ${!open ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+                        <div className={`flex xl:hidden flex-col gap-1 text-center justify-between w-full px-4 pb-2 text-white text-xs font-primary tracking-wider transition-opacity duration-300 ${!open ? 'opacity-0 pointer-events-none' : 'opacity-100'} z-[99999999] pointer-events-auto`}>
                             <span>Ramón Morcillo - {new Date().getFullYear()}</span>
                             <span>Made with 💚 & ⏳</span>
                         </div>
@@ -197,17 +190,17 @@ const Navigation: React.FC = () => {
             </div>
             {/* Dual rotated footer items, fixed vertical center, left/right (improved for consistent layout) */}
             <footer className="fixed hidden xl:block z-10 w-screen top-1/2 left-0 -translate-y-1/2 pointer-events-none px-16">
-                <div className="relative w-full h-40">
+                <div className="relative w-full h-40 pointer-events-none">
                     {/* Left item */}
                     <div
-                        className="absolute left-0 top-1/2 -translate-y-1/2 origin-left -rotate-90 text-white text-xs font-primary tracking-wider pointer-events-auto"
+                        className="absolute left-0 top-1/2 -translate-y-1/2 origin-left -rotate-90 text-white text-xs font-primary tracking-wider pointer-events-none"
                         style={{ transformOrigin: 'left center' }}
                     >
                         Ramón Morcillo - {new Date().getFullYear()}
                     </div>
                     {/* Right item */}
                     <div
-                        className="absolute right-0 top-1/2 -translate-y-1/2 origin-right rotate-90 text-white text-xs font-primary tracking-wider pointer-events-auto pt-0 -mr-3"
+                        className="absolute right-0 top-1/2 -translate-y-1/2 origin-right rotate-90 text-white text-xs font-primary tracking-wider pointer-events-none pt-0 -mr-3"
                         style={{ transformOrigin: 'right center' }}
                     >
                         Made with 💚 & ⏳

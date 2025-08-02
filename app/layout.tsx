@@ -20,11 +20,17 @@ export default function RootLayout({
     <html lang="en" className={roboto.variable}>
       <body>
         <DynamicFavicon />
-        <StarRoot />
-        <main className="relative min-h-screen flex flex-col font-thin font-sans">
+        {/* Stars background: always behind, never blocks interaction */}
+        <div className="fixed inset-0 z-0 pointer-events-none">
+          <StarRoot />
+        </div>
+        {/* Main content and navigation above stars */}
+        <div className="relative z-10">
+          <main className="min-h-screen flex flex-col font-thin font-sans">
+            {children}
+          </main>
           <Navigation />
-          {children}
-        </main>
+        </div>
       </body>
     </html>
   );

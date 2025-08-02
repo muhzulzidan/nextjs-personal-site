@@ -60,6 +60,7 @@ function getPostOrProjectByFile(filePath: string) {
       ...(data.tags ? { tags: data.tags } : {}),
       ...(data.type ? { type: data.type } : {}),
       ...(data.url ? { url: data.url } : {}),
+      ...(data.commentsUrl ? { commentsUrl: data.commentsUrl } : {}),
     },
     image,
     content,
